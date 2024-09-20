@@ -5,7 +5,7 @@ from textblob import TextBlob
 import sqlite3
 
 def fetch_data(ticker):
-    api_key = 'YOUR_API_KEY'
+    api_key = 'bce53d4df6cf4bfdbdef27ed7564a13c'
     url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&apikey={api_key}'
     response = requests.get(url).json()
     
