@@ -1,4 +1,3 @@
-
 # app.py
 from flask import Flask, request, jsonify
 from models import fetch_data, predict_sentiment
@@ -15,5 +14,3 @@ def predict():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
