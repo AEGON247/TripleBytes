@@ -1,8 +1,11 @@
 # app.py
 from flask import Flask, request, jsonify
 from models import fetch_data, predict_sentiment
+from flask_cors import CORS
      
 app = Flask(__name__)
+CORS(app)
+
 
 @app.route('/api/predict', methods=['GET'])
 def predict():
