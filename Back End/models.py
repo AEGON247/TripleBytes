@@ -11,7 +11,7 @@ import joblib
 
 # Fetch stock data from the Alpha Vantage API
 def fetch_data(ticker):
-    api_key = 'bce53d4df6cf4bfdbdef27ed7564a13c'
+    api_key = 'KSUSMLIBH7MMNYNN'
     url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&apikey={api_key}'
     response = requests.get(url).json()
     
