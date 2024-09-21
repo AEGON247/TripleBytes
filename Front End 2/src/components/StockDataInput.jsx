@@ -1,36 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import axios from "axios";  // Import axios for making API calls
 
-export const StockDataInput = ({ setPredictionData }) => {
+export const StockDataInput = ({ setPredictionData, ticker }) => {
   const [formData, setFormData] = useState({
-    opening: '',
-    closing: '',
-    high: '',
-    low: '',
-    volume: '',
+    opening: "",
+    closing: "",
+    high: "",
+    low: "",
+    volume: "",
   });
 
-  // Function to handle input changes
+  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-  };
-
-  // Function to handle form submission and make API call
-  const handleSubmit = async () => {
-    try {
-      const { data } = await axios.get(
-        `http://localhost:5000/api/predict?ticker=MSFT`  // Replace ticker accordingly
-      );
-      setPredictionData(data);  // Pass the received data to parent component
-    } catch (error) {
-      console.error("Error fetching prediction:", error);
-    }
   };
 
   return (
@@ -73,9 +60,6 @@ export const StockDataInput = ({ setPredictionData }) => {
           placeholder="Volume"
         />
       </div>
-      <Button className="mt-4 w-full" onClick={handleSubmit}>
-        Predict
-      </Button>
     </div>
   );
 };

@@ -1,28 +1,25 @@
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { StockDataInput } from "./StockDataInput";
 import { PredictionDisplay } from "./PredictionDisplay";
-
-const fetchPrediction = async (ticker) => {
-  const response = await axios.get(`http://localhost:5000/api/predict?ticker=${ticker}`);
-  return response.data;
-};
+import axios from "axios";
 
 const StockPrediction = () => {
-  const [ticker, setTicker] = useState("");
-  const [predictionData, setPredictionData] = useState(null);  // State for holding prediction data
-  const { data, error, isLoading, refetch } = useQuery(
-    ["stockPrediction", ticker],
-    () => fetchPrediction(ticker),
-    {
-      enabled: false,  // Disable auto-fetch until refetch is called
-    }
-  );
+  const [ticker, setTicker] = useState("");    // Store user inputted ticker
+  const [predictionData, setPredictionData] = useState(null);  // Store the prediction data
+  const [error, setError] = useState(null);    // Store error messages
 
-  const handleFetchPrediction = () => {
-    if (ticker) {
-      refetch();  // Trigger fetching the data
+  const handleFetchPrediction = async () => {
+    try {
+      if (!ticker) {
+        alert("Please enter a stock ticker!");
+        return;
+      }
+      const response = await axios.get(
+        `http://localhost:5000/api/predict?ticker=${ticker}`
+      );
+      setPredictionData(response.data);  // Set data from backend into predictionData
+    } catch (err) {
+      setError("Error fetching prediction data. Please try again.");
     }
   };
 
@@ -37,13 +34,18 @@ const StockPrediction = () => {
       />
       <button onClick={handleFetchPrediction}>Get Prediction</button>
 
-      {/* Pass the prediction data to the display component */}
-      <StockDataInput setPredictionData={setPredictionData} />
+      {/* Display error message if there's an error */}
+      {error && <p>{error}</p>}
 
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error fetching prediction.</p>}
+      {/* Display stock input form */}
+      <StockDataInput setPredictionData={setPredictionData} ticker={ticker} />
+
+      {/* Display chart with prediction data */}
       {predictionData && (
-        <PredictionDisplay chartData={predictionData.chartData} />
+        <PredictionDisplay
+          chartData={predictionData.chartData}
+          prediction={predictionData.prediction}
+        />
       )}
     </div>
   );
