@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { StockDataInput } from "./StockDataInput";
+import { PredictionDisplay } from "./PredictionDisplay";
 
 const fetchPrediction = async (ticker) => {
   const response = await axios.get(`http://localhost:5000/api/predict?ticker=${ticker}`);
@@ -9,6 +11,7 @@ const fetchPrediction = async (ticker) => {
 
 const StockPrediction = () => {
   const [ticker, setTicker] = useState("");
+  const [predictionData, setPredictionData] = useState(null);  // State for holding prediction data
   const { data, error, isLoading, refetch } = useQuery(
     ["stockPrediction", ticker],
     () => fetchPrediction(ticker),
@@ -34,13 +37,13 @@ const StockPrediction = () => {
       />
       <button onClick={handleFetchPrediction}>Get Prediction</button>
 
+      {/* Pass the prediction data to the display component */}
+      <StockDataInput setPredictionData={setPredictionData} />
+
       {isLoading && <p>Loading...</p>}
       {error && <p>Error fetching prediction.</p>}
-      {data && (
-        <div>
-          <h2>Prediction: {data.prediction}</h2>
-          {/* Display chartData or other results here */}
-        </div>
+      {predictionData && (
+        <PredictionDisplay chartData={predictionData.chartData} />
       )}
     </div>
   );
