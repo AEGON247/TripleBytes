@@ -26,19 +26,26 @@ const StockPrediction = () => {
   return (
     <div className="stock-prediction">
       <h1>Stock Prediction</h1>
+      
+      {/* Stock selector input */}
       <input
         type="text"
         value={ticker}
         onChange={(e) => setTicker(e.target.value)}
         placeholder="Enter Stock Ticker (e.g., AAPL)"
+        className="border p-2 rounded mb-4"
       />
-      <button onClick={handleFetchPrediction}>Get Prediction</button>
+
+      {/* Predict Button */}
+      <button 
+        onClick={handleFetchPrediction} 
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
+      >
+        Predict
+      </button>
 
       {/* Display error message if there's an error */}
-      {error && <p>{error}</p>}
-
-      {/* Display stock input form */}
-      <StockDataInput setPredictionData={setPredictionData} ticker={ticker} />
+      {error && <p className="text-red-500">{error}</p>}
 
       {/* Display chart with prediction data */}
       {predictionData && (
