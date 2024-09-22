@@ -109,13 +109,20 @@ def predict_sentiment(ticker):
     prediction = model.predict(X_test[-1:])[0]
     
     # Step 8: Create chart data for the frontend
-    chart_data = {
-        'labels': prices.index.tolist(),
-        'prices': prices['Close'].tolist(),
-        'sentiment': sentiments['sentiment'].tolist()
-    }
+    chart_data = [
+        {
+            'date': date.strftime('%Y-%m-%d'),  # Convert date to string format
+            'prices': price,                    # Stock price (Close)
+            'sentiment': sentiment               # Sentiment score
+        }
+        for date, price, sentiment in zip(prices.index, prices['Close'], sentiments['sentiment'])
+    ]
+    
+    # The prediction is for the next date, so we get the index of the last date
+    prediction_index = len(chart_data) - 1  # This assumes the prediction is for the latest date
 
-    return prediction, chart_data
+    return prediction, chart_data, prediction_index
+
 
 # Initialize the database (optional if you want to save data locally)
 def init_db():
